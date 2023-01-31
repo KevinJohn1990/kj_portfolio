@@ -69,6 +69,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       console.log('window resize');
       this.setRendererSize();
     });
+
     window.addEventListener('mousemove', (e) => {
       // browser (top left (0,0))
       // but three js (0,0,0) => center of screen
@@ -76,39 +77,87 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.mouse.y = -(e.clientY / innerHeight) * 2 + 1;
       // console.log(mouse);
     });
+
     this.miscFuncs();
   }
+
   miscFuncs() {
+    document.addEventListener('wheel', (e) => {
+      console.log('on wheel');
+      if (this.camera) {
+        // console.log('c: ', this.camera.position);
+        // console.log('orb: ', this.orbitObj.object.position);
+        console.log('orb: ', this.orbitObj);
+      }
+    });
     document.querySelector('#viewBtn').addEventListener('click', (e) => {
       e.preventDefault();
-      console.log('go');
-      gsap.to('#container', {
-        opacity: 0,
-        duration: 1.5,
-        y: 0,
-        ease: 'expo',
-      });
-      gsap.to(this.camera.position, {
-        z: 20,
-        ease: 'power3.inOut',
-        duration: 2,
-      });
+      console.log('Camera: ', this.camera);
+      // const a = 1000;
+      // const b = 700;
+      // const c = -1000;
+      // const d = -700;
+      // console.log('cam position: ', this.camera.position);
+      // console.log('cam rotation: ', this.camera.rotation);
 
-      gsap.to(this.camera.rotation, {
+      gsap.to(this.planeMesh.rotation, {
         x: 1.57,
         ease: 'power3.inOut',
-        duration: 2,
-      });
-
-      gsap.to(this.camera.position, {
-        y: 1000,
-        ease: 'power3.in',
-        duration: 1.5,
-        delay: 2,
+        duration: 1,
         onComplete: () => {
-          window.location = 'https://www.google.com' as any;
+          this.addAnotherCubeMesh();
+          gsap.to(this.camera.position, {
+            z: this.camera.position.z - 1000,
+            ease: 'power3.inOut',
+            duration: 2,
+            onComplete: () => {
+              this.orbitObj.object.position.x = this.camera.position.x;
+              this.orbitObj.object.position.y = this.camera.position.y;
+              this.orbitObj.object.position.z = this.camera.position.z;
+
+              this.orbitObj.target.x = 0;
+              this.orbitObj.target.y = 0;
+              this.orbitObj.target.z = -1000;
+              gsap.to(this.camera.position, {
+                z: this.camera.position.z + 50,
+                ease: 'power3.inOut',
+                duration: 2,
+              });
+            },
+          });
         },
       });
+
+      //
+
+      // gsap.to('#container', {
+      //   opacity: 0,
+      //   duration: 1.5,
+      //   y: 0,
+      //   ease: 'expo',
+      // });
+      // gsap.to(this.camera.position, {
+      //   z: 20,
+      //   ease: 'power3.inOut',
+      //   duration: 2,
+      // });
+
+      // gsap.to(this.camera.rotation, {
+      //   x: 1.57,
+      //   ease: 'power3.inOut',
+      //   duration: 2,
+      // });
+
+      // gsap.to(this.camera.position, {
+      //   y: 1000,
+      //   ease: 'power3.in',
+      //   duration: 1.5,
+      //   delay: 2,
+      //   onComplete: () => {
+      //     this.showAnotherMesh();
+      //     // window.location = 'https://www.google.com' as any;
+      //   },
+      // });
     });
 
     gsap.to('#idH1', {
@@ -167,11 +216,11 @@ export class AppComponent implements OnInit, AfterViewInit {
   // basically canvas html element - that runs WebGL
   // WebGL - framework to run 3d on web
   // the below object - gives us the option to rotate the object (using the mouse)
-
   private setRendererSize() {
     this.renderer.setSize(innerWidth, innerHeight);
   }
 
+  orbitObj: OrbitControls;
   loadScene() {
     // console.log('load This: ', this);
     const renderer = this.renderer;
@@ -185,8 +234,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     document.body.appendChild(renderer.domElement);
     //************************************************************** */
 
-    const orbitObj = new OrbitControls(this.camera, this.renderer.domElement);
-
+    this.orbitObj = new OrbitControls(this.camera, this.renderer.domElement);
     // move away
     camera.position.z = 50;
 
@@ -215,12 +263,14 @@ export class AppComponent implements OnInit, AfterViewInit {
     // (color, intensity)
     const light = new THREE.DirectionalLight(0xffffff, 1);
     // x, y, z
-    light.position.set(0, 0, 1);
+    light.position.set(-1, -1, 1);
+    // light.position.set(0, 0, 1);
     scene.add(light);
 
     const backLight = new THREE.DirectionalLight(0xffffff, 1);
     // x, y, z
-    backLight.position.set(0, 0, -1);
+    backLight.position.set(1, 1, -1);
+    // backLight.position.set(0, 0, -1);
     scene.add(backLight);
 
     // star objects
@@ -274,7 +324,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     const { array, originalPosition, randomValues } = mesh.geometry.attributes[
       'position'
     ] as any;
-
+    // console.log('arr, org, rand', array, originalPosition, randomValues);
     // The below code block - is for wave like motion of the planeMesh (using sin and cosine functions)
     if (originalPosition && randomValues) {
       for (let i = 0; i < array.length; i += 3) {
@@ -283,9 +333,9 @@ export class AppComponent implements OnInit, AfterViewInit {
         array[i + 1] =
           originalPosition[i + 1] +
           Math.sin(frame + randomValues[i + 1]) * 0.001;
-        if (i == 0) {
-          // console.log(Math.cos(frame + randomValues[i]));
-        }
+        // if (i == 0) {
+        //   // console.log(Math.cos(frame + randomValues[i]));
+        // }
       }
       mesh.geometry.attributes['position'].needsUpdate = true;
     }
@@ -374,29 +424,29 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.setPosition(planeMesh);
   }
 
-  setPosition(mesh: any) {
+  private setPosition(mesh: any) {
     if (mesh) {
-      this.frame += 0.1;
+      // this.frame += 0.1;
 
       // const mesh = planeMesh;
-      const { array } = mesh.geometry.attributes.position;
+      // const { array } = mesh.geometry.attributes.position;
 
-      const randomValues = [];
-      for (let i = 0; i < array.length; i++) {
-        if (i % 3 === 0) {
-          const x = array[i];
-          const y = array[i + 1];
-          const z = array[i + 2];
-          array[i] = x + (Math.random() - 0.5) * 3;
-          array[i + 1] = y + (Math.random() - 0.5) * 3;
-          array[i + 2] = z + (Math.random() - 0.5) * 3;
-        }
-        randomValues.push(Math.random() * Math.PI * 2);
-      }
+      // const randomValues = [];
+      // for (let i = 0; i < array.length; i++) {
+      //   if (i % 3 === 0) {
+      //     const x = array[i];
+      //     const y = array[i + 1];
+      //     const z = array[i + 2];
+      //     array[i] = x + (Math.random() - 0.5) * 3;
+      //     array[i + 1] = y + (Math.random() - 0.5) * 3;
+      //     array[i + 2] = z + (Math.random() - 0.5) * 3;
+      //   }
+      //   randomValues.push(Math.random() * Math.PI * 2);
+      // }
 
-      mesh.geometry.attributes.position.randomValues = randomValues;
-      mesh.geometry.attributes['position'].originalPosition =
-        mesh.geometry.attributes['position'].array;
+      // mesh.geometry.attributes.position.randomValues = randomValues;
+      // mesh.geometry.attributes['position'].originalPosition =
+      //   mesh.geometry.attributes['position'].array;
 
       const colors = [];
       for (let i = 0; i < mesh.geometry.attributes.position.count; i++) {
@@ -407,5 +457,27 @@ export class AppComponent implements OnInit, AfterViewInit {
         new THREE.BufferAttribute(new Float32Array(colors), 3)
       );
     }
+  }
+
+  cubeMesh: THREE.Mesh;
+  addAnotherCubeMesh() {
+    let cubeGeometry = new THREE.BoxGeometry(50, 50, 50);
+    let cubeMaterial = new THREE.MeshPhongMaterial({
+      color: 0x44aa88,
+    });
+    let cubeMesh = this.cubeMesh;
+    cubeMesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
+
+    cubeMesh.position.z = this.planeMesh.position.z - 1000;
+    // const colors = [];
+    // for (let i = 0; i < cubeMesh.geometry.attributes.position.count; i++) {
+    //   colors.push(0, 0.19, 0.4);
+    // }
+    // cubeMesh.geometry.setAttribute(
+    //   'color',
+    //   new THREE.BufferAttribute(new Float32Array(colors), 3)
+    // );
+    // add animation
+    this.scene.add(cubeMesh);
   }
 }

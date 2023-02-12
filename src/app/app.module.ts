@@ -12,6 +12,9 @@ import { PortfolioCertificationComponent } from './portfolio-page/portfolio-cert
 import { PortfolioPersonalComponent } from './portfolio-page/portfolio-personal/portfolio-personal.component';
 import { PortfolioThanksComponent } from './portfolio-page/portfolio-thanks/portfolio-thanks.component';
 import { NgImageSliderModule } from 'ng-image-slider';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+// import {ROUTER_PROVIDERS} from 'angular2/router';
+// import {LocationStrategy, Location, HashLocationStrategy } from 'angular2/router';
 
 @NgModule({
   declarations: [

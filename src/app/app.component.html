@@ -1,16 +1,34 @@
-<div id="app">
-    <div id="container" class="absolute text-white text-center max-w-2xl"
-      style="top: 50%; transform: translate(-50%, -50%); left: 50%;">
-      <h1 id="idH1" style="transform: translateY(30px)"
-        class="font-space-mono text-sm uppercase tracking-wide opacity-0">
-        Christopher Lis
-      </h1>
-      <p id="msgId" style="transform: translateY(30px)" class="font-exo text-4xl opacity-0">
-        ONE WITH AN EVERLASTING DESIRE FOR THE UNKNOWN & UNTOLD
-      </p>
-      <a id="viewBtn" style="transform: translateY(30px)" href="https://chriscourses.com/"
-        class="opacity-0 border px-4 py-2 rounded-lg text-sm font-space-mono uppercase mt-8 hover:bg-white hover:text-gray-800 inline-block">
-        View Work
-      </a>
-    </div>
+<div id="app" *ngIf="!bShowPortfolioPage">
+  <!-- <div id="app" *ngIf="false"> -->
+  <div
+    id="container"
+    class="absolute text-white text-center max-w-2xl"
+    style="top: 50%; transform: translate(-50%, -50%); left: 50%"
+  >
+    <h1
+      id="idH1"
+      style="font-size: 1.3em; transform: translateY(30px)"
+      class="font-space-mono text-sm uppercase tracking-wide opacity-0"
+    >
+      Kevin John
+    </h1>
+    <p
+      id="msgId"
+      style="transform: translateY(30px)"
+      class="font-exo text-4xl opacity-0"
+    >
+      Full Stack Developer with about 9 years of experience by God's grace.
+    </p>
+    <button
+      id="viewBtn"
+      style="transform: translateY(30px)"
+      (click)="viewBtnClick($event)"
+      class="opacity-0 border px-4 py-2 rounded-lg text-sm font-space-mono uppercase mt-8 hover:bg-white hover:text-gray-800 inline-block"
+    >
+      View
+    </button>
   </div>
+</div>
+<div *ngIf="bShowPortfolioPage">
+  <app-portfolio-page></app-portfolio-page>
+</div>

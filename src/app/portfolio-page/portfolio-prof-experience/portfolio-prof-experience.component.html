@@ -1,0 +1,14 @@
+<div class="pg-sub-container">
+  <h3>Professional experience</h3>
+  <hr />
+  <ng-container *ngFor="let e of experiences">
+    <p class="pg-medium-title">{{ e.title }}</p>
+    <p class="pg-small-title">{{ e.company }}</p>
+    <p class="pg-extra-small-title">{{ e.timeperiod }}</p>
+    <hr />
+    <ul>
+      <li *ngFor="let p of e.points">{{ p }}</li>
+    </ul>
+    <hr />
+  </ng-container>
+</div>

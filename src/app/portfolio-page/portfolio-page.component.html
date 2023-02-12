@@ -1,0 +1,18 @@
+<div class="pg-transparent pg-container">
+  <div class="pg-transparent pg-header">
+    <ul>
+      <li
+        class="header-element"
+        *ngFor="let h of headersElements"
+        [routerLink]="h.link"
+        [routerLinkActive]="'active'"
+      >
+        {{ h.text }}
+      </li>
+    </ul>
+  </div>
+  <div class="pg-transparent pg-content">
+    <router-outlet></router-outlet>
+  </div>
+  <div class="pg-transparent pg-footer">&copy; Kevin John - 2023</div>
+</div>

@@ -15,11 +15,13 @@ import * as dat_gui_utils from './utils/dat_gui';
 })
 export class AppComponent implements OnInit, AfterViewInit {
   title = 'kj_portfolio';
+
+  bShowPortfolioPage = false;
   constructor() {
     // this.animate.prototype.bind = this;
   }
 
-  gui = dat_gui_utils.NewGuiObject(); // new dat.GUI();
+  // gui = dat_gui_utils.NewGuiObject(); // new dat.GUI();
   frame = 0;
   world = {
     plane: {
@@ -28,6 +30,9 @@ export class AppComponent implements OnInit, AfterViewInit {
       widthSegments: 50,
       heightSegments: 50,
     },
+    r: 0.0,
+    g: 0.19,
+    b: 0.4,
   };
   MAX_VAL = 500;
   MAX_VAL_SEG = 100;
@@ -57,6 +62,19 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {}
 
+  resizeEventListener = (e) => {
+    console.log('window resize');
+    this.setRendererSize();
+  };
+
+  mouseMoveEventListener = (e) => {
+    // browser (top left (0,0))
+    // but three js (0,0,0) => center of screen
+    this.mouse.x = (e.clientX / innerWidth) * 2 - 1;
+    this.mouse.y = -(e.clientY / innerHeight) * 2 + 1;
+    // console.log(mouse);
+  };
+
   ngAfterViewInit(): void {
     // console.log('Renderer: ', this.renderer);
     // this.animate.bind(this);
@@ -65,52 +83,59 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     this.loadScene();
 
-    window.addEventListener('resize', (e) => {
-      console.log('window resize');
-      this.setRendererSize();
-    });
-    window.addEventListener('mousemove', (e) => {
-      // browser (top left (0,0))
-      // but three js (0,0,0) => center of screen
-      this.mouse.x = (e.clientX / innerWidth) * 2 - 1;
-      this.mouse.y = -(e.clientY / innerHeight) * 2 + 1;
-      // console.log(mouse);
-    });
+    window.addEventListener('resize', this.resizeEventListener);
+    window.addEventListener('mousemove', this.mouseMoveEventListener);
     this.miscFuncs();
   }
-  miscFuncs() {
-    document.querySelector('#viewBtn').addEventListener('click', (e) => {
-      e.preventDefault();
-      console.log('go');
-      gsap.to('#container', {
-        opacity: 0,
-        duration: 1.5,
-        y: 0,
-        ease: 'expo',
-      });
-      gsap.to(this.camera.position, {
-        z: 20,
-        ease: 'power3.inOut',
-        duration: 2,
-      });
 
-      gsap.to(this.camera.rotation, {
-        x: 1.57,
-        ease: 'power3.inOut',
-        duration: 2,
-      });
+  private animationFrameId;
+  viewBtnClick(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    console.log('go', { ...this.camera.position });
 
-      gsap.to(this.camera.position, {
-        y: 1000,
-        ease: 'power3.in',
-        duration: 1.5,
-        delay: 2,
-        onComplete: () => {
-          window.location = 'https://www.google.com' as any;
-        },
-      });
+    // gsap.to(this.camera.position, {
+    //   z: 50,
+    //   ease: 'power3.inOut',
+    //   duration: 0.4,
+    // });
+    gsap.to('#container', {
+      opacity: 0,
+      duration: 1.5,
+      y: 0,
+      ease: 'expo',
     });
+    gsap.to(this.camera.position, {
+      z: 20,
+      ease: 'power3.inOut',
+      duration: 2,
+    });
+    gsap.to(this.camera.rotation, {
+      x: 1.57,
+      ease: 'power3.inOut',
+      duration: 2,
+    });
+    gsap.to(this.camera.position, {
+      y: 1000,
+      ease: 'power3.in',
+      duration: 1.5,
+      delay: 2,
+      onComplete: () => {
+        this.bShowPortfolioPage = true;
+        console.log('go', { ...this.camera.position });
+        gsap.to(this.camera.position, {
+          y: 200,
+          delay: 0,
+          duration: 0,
+        });
+        console.log('go', { ...this.camera.position });
+        // console.log('Portfolio Page: ', this.bShowPortfolioPage);
+        // document.body.removeChild(this.renderer.domElement);
+        // cancelAnimationFrame(this.animationFrameId);
+      },
+    });
+  }
 
+  miscFuncs() {
     gsap.to('#idH1', {
       opacity: 1,
       duration: 1.5,
@@ -134,34 +159,35 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   initDatGui() {
-    const gui = this.gui;
-    const world = this.world;
-    const MAX_VAL = this.MAX_VAL;
-    const MAX_VAL_SEG = this.MAX_VAL_SEG;
-    // Adding variables
-    const func = () => {
-      this.updatePlaneMeshGeometry();
-    };
-    dat_gui_utils.AddGuiVariable(gui, world.plane, 'width', 1, MAX_VAL, func);
-    dat_gui_utils.AddGuiVariable(gui, world.plane, 'height', 1, MAX_VAL, func);
-
-    dat_gui_utils.AddGuiVariable(
-      gui,
-      world.plane,
-      'widthSegments',
-      1,
-      MAX_VAL_SEG,
-      func
-    );
-
-    dat_gui_utils.AddGuiVariable(
-      gui,
-      world.plane,
-      'heightSegments',
-      1,
-      MAX_VAL_SEG,
-      func
-    );
+    // const gui = this.gui;
+    // const world = this.world;
+    // const MAX_VAL = this.MAX_VAL;
+    // const MAX_VAL_SEG = this.MAX_VAL_SEG;
+    // // Adding variables
+    // const func = () => {
+    //   this.updatePlaneMeshGeometry();
+    // };
+    // dat_gui_utils.AddGuiVariable(gui, world.plane, 'width', 1, MAX_VAL, func);
+    // dat_gui_utils.AddGuiVariable(gui, world.plane, 'height', 1, MAX_VAL, func);
+    // dat_gui_utils.AddGuiVariable(
+    //   gui,
+    //   world.plane,
+    //   'widthSegments',
+    //   1,
+    //   MAX_VAL_SEG,
+    //   func
+    // );
+    // dat_gui_utils.AddGuiVariable(
+    //   gui,
+    //   world.plane,
+    //   'heightSegments',
+    //   1,
+    //   MAX_VAL_SEG,
+    //   func
+    // );
+    // dat_gui_utils.AddGuiVariable(gui, world, 'r', 0.0, 1, func);
+    // dat_gui_utils.AddGuiVariable(gui, world, 'g', 0.0, 1, func);
+    // dat_gui_utils.AddGuiVariable(gui, world, 'b', 0.0, 1, func);
   }
 
   // basically canvas html element - that runs WebGL
@@ -210,7 +236,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     // add animation
     scene.add(this.planeMesh);
 
-    this.setPosition(this.planeMesh);
+    this.setPosition(this.planeMesh, this.world);
 
     // (color, intensity)
     const light = new THREE.DirectionalLight(0xffffff, 1);
@@ -259,16 +285,16 @@ export class AppComponent implements OnInit, AfterViewInit {
     const scene = this.scene;
     const mouse = this.mouse;
     const camera = this.camera;
-    let frame = this.frame;
     const planeMesh = this.planeMesh;
     const raycaster = this.raycaster;
 
-    requestAnimationFrame(() => {
+    this.animationFrameId = requestAnimationFrame(() => {
       return this.animate();
     });
     renderer.render(scene, camera);
     raycaster.setFromCamera(mouse, camera);
-    frame += 0.1;
+    this.frame += 0.1;
+    let frame = this.frame;
 
     const mesh = planeMesh;
     const { array, originalPosition, randomValues } = mesh.geometry.attributes[
@@ -284,7 +310,19 @@ export class AppComponent implements OnInit, AfterViewInit {
           originalPosition[i + 1] +
           Math.sin(frame + randomValues[i + 1]) * 0.001;
         if (i == 0) {
-          // console.log(Math.cos(frame + randomValues[i]));
+          // console.log(
+          //   'f - r1 - r - o1 - o',
+          //   frame,
+          //   randomValues[i + 1],
+          //   randomValues[i],
+          //   originalPosition[i + 1],
+          //   originalPosition[i],
+          //   array[i],
+          //   array[i + 1],
+          //   Math.cos(frame + randomValues[i]),
+          //   Math.sin(frame + randomValues[i + 1]),
+          //   frame
+          // );
         }
       }
       mesh.geometry.attributes['position'].needsUpdate = true;
@@ -371,10 +409,10 @@ export class AppComponent implements OnInit, AfterViewInit {
       world.plane.widthSegments,
       world.plane.heightSegments
     );
-    this.setPosition(planeMesh);
+    this.setPosition(planeMesh, world);
   }
 
-  setPosition(mesh: any) {
+  setPosition(mesh: any, w: any) {
     if (mesh) {
       this.frame += 0.1;
 
@@ -395,12 +433,13 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
 
       mesh.geometry.attributes.position.randomValues = randomValues;
-      mesh.geometry.attributes['position'].originalPosition =
-        mesh.geometry.attributes['position'].array;
+      // console.log('arr: ', mesh.geometry.attributes['position'].array);
+      mesh.geometry.attributes['position'].originalPosition = [...array];
 
       const colors = [];
       for (let i = 0; i < mesh.geometry.attributes.position.count; i++) {
-        colors.push(0, 0.19, 0.4);
+        // colors.push(0, 0.19, 0.4);
+        colors.push(w.r, w.g, w.b);
       }
       mesh.geometry.setAttribute(
         'color',

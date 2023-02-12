@@ -26,6 +26,8 @@
 .pg-sub-container {
   margin: 20px;
   padding: 20px;
+  max-height: 80vh;
+  overflow: auto;
 }
 .pg-sub-container h3 {
   color: rgb(0, 192, 106);

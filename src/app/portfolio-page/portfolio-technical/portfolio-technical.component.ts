@@ -10,7 +10,7 @@ export class PortfolioTechnicalComponent {
     title: string;
     content: string;
   }[] = [
-    { title: 'Backend Languages', content: 'Go, C#, VB.net' },
+    { title: 'Backend Languages', content: 'Go, C#, VB.net, Nodejs' },
     { title: 'Scripting Languages', content: 'JavaScript' },
     { title: 'Client-side framework', content: 'Angular, React' },
     {
@@ -28,6 +28,7 @@ export class PortfolioTechnicalComponent {
     },
     { title: 'Mobile Framework', content: 'Ionic (PWAs)' },
     { title: 'Cloud', content: 'AWS' },
+    { title: 'Container Technology', content: 'Docker' },
     { title: 'Operating systems', content: 'Windows, Linux-Ubuntu, macOS' },
   ];
 }

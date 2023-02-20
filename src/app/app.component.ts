@@ -91,7 +91,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   private animationFrameId;
   viewBtnClick(e) {
     if (e && e.preventDefault) e.preventDefault();
-    console.log('go', { ...this.camera.position });
+    // console.log('go', { ...this.camera.position });
 
     // gsap.to(this.camera.position, {
     //   z: 50,
@@ -121,13 +121,13 @@ export class AppComponent implements OnInit, AfterViewInit {
       delay: 2,
       onComplete: () => {
         this.bShowPortfolioPage = true;
-        console.log('go', { ...this.camera.position });
+        // console.log('go', { ...this.camera.position });
         gsap.to(this.camera.position, {
           y: 200,
           delay: 0,
           duration: 0,
         });
-        console.log('go', { ...this.camera.position });
+        // console.log('go', { ...this.camera.position });
         // console.log('Portfolio Page: ', this.bShowPortfolioPage);
         // document.body.removeChild(this.renderer.domElement);
         // cancelAnimationFrame(this.animationFrameId);

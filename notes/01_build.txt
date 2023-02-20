@@ -1,9 +1,13 @@
-ng build --base-href /kj_portfolio
-ng build --base-href /kj_portfolio_site
+ng build --base-href /kj_portfolio/
+ng build --base-href /kj_portfolio_site/
 
 
 check angular.json file for more info on build output
-ng build --output-path docs --base-href /repository-name
+ng build --output-path docs --base-href /repository-name/
 
 
 ng build --output-path docs --base-href /kj_portfolio/
+
+Problem with git bash
+    the above command generates path specific to pc
+    if error in deployment try building in powershell or cmd prompt

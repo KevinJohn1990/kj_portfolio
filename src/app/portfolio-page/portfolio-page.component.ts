@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./portfolio-page.component.scss'],
 })
 export class PortfolioPageComponent {
+  year = new Date().getFullYear();
   headersElements: {
     id: number;
     text: string;

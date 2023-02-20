@@ -6,4 +6,4 @@ check angular.json file for more info on build output
 ng build --output-path docs --base-href /repository-name
 
 
-ng build --output-path docs --base-href /kj_portfolio
+ng build --output-path docs --base-href /kj_portfolio/

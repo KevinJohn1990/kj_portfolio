@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CameraService } from '../camera.service';
 
 @Component({
   selector: 'app-portfolio-page',
@@ -7,6 +8,7 @@ import { Component } from '@angular/core';
 })
 export class PortfolioPageComponent {
   year = new Date().getFullYear();
+  hide = false;
   headersElements: {
     id: number;
     text: string;
@@ -24,4 +26,10 @@ export class PortfolioPageComponent {
     { id: 6, text: 'Personal Info', link: 'portfolio-personal' },
     { id: 7, text: 'Thanks', link: 'portfolio-thanks' },
   ];
+  constructor(private cameraService: CameraService){ }
+
+  goHome(){
+    this.hide = true;
+    this.cameraService.resetCameraPosition();
+  }
 }

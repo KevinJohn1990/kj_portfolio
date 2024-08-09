@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import gsap from 'gsap';
 import * as THREE from 'three';
 import { PointsMaterial } from 'three';
@@ -7,20 +7,23 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 // import { OrbitControls } from 'https://unpkg.com/three@0.126.1/examples/jsm/controls/OrbitControls.js';
 // import * as dat from 'dat.gui';
 import * as dat_gui_utils from './utils/dat_gui';
+import { CameraService } from './camera.service';
+import { Subject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   // title = 'kj_portfolio';
   nYearsOfExperience = 11;
   uaeExperience = 8;
   bShowPortfolioPage = false;
-  constructor() {
+  constructor(private cameraService: CameraService) {
     // this.animate.prototype.bind = this;
   }
+
 
   // gui = dat_gui_utils.NewGuiObject(); // new dat.GUI();
   frame = 0;
@@ -43,7 +46,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   // raycaster - little laser pointer - points to screen
 
   scene = new THREE.Scene();
-  camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1000);
+  camera = this.cameraService.setAndGetCamera(75, innerWidth / innerHeight, 0.1, 1000);
   mouse = {
     x: undefined,
     y: undefined,
@@ -61,7 +64,18 @@ export class AppComponent implements OnInit, AfterViewInit {
   starMaterial: THREE.PointsMaterial;
   stars: THREE.Points;
 
-  ngOnInit(): void {}
+  private cameraSubs: Subject<boolean> = new Subject();
+  private cameraSubscription: Subscription = null;
+  ngOnInit(): void {
+    this.cameraService.setCameraSubs(this.cameraSubs);
+    this.cameraSubscription = this.cameraSubs.subscribe(s => {
+      this.resetCamera();
+    })
+  }
+
+  ngOnDestroy(): void {
+   if (this.cameraSubscription) this.cameraSubscription.unsubscribe();
+  }
 
   resizeEventListener = (e) => {
     console.log('window resize');
@@ -75,11 +89,11 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.mouse.y = -(e.clientY / innerHeight) * 2 + 1;
     // console.log(mouse);
   };
-
   ngAfterViewInit(): void {
     // console.log('Renderer: ', this.renderer);
     // this.animate.bind(this);
     // this.loadScene.bind(this);
+
     this.initDatGui();
 
     this.loadScene();
@@ -87,12 +101,14 @@ export class AppComponent implements OnInit, AfterViewInit {
     window.addEventListener('resize', this.resizeEventListener);
     window.addEventListener('mousemove', this.mouseMoveEventListener);
     this.miscFuncs();
+ 
   }
 
   private animationFrameId;
   viewBtnClick(e) {
     if (e && e.preventDefault) e.preventDefault();
-    // console.log('go', { ...this.camera.position });
+    console.log('go', { ...this.camera.position });
+    console.log('go', { ...this.mouse });
 
     // gsap.to(this.camera.position, {
     //   z: 50,
@@ -102,7 +118,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     gsap.to('#container', {
       opacity: 0,
       duration: 1.5,
-      y: 0,
+      // y: 0,
       ease: 'expo',
     });
     gsap.to(this.camera.position, {
@@ -136,6 +152,41 @@ export class AppComponent implements OnInit, AfterViewInit {
     });
   }
 
+  resetCamera(){
+    gsap.to('#container', {
+      opacity: 1,
+      duration: 1.5,
+      ease: 'expo',
+    });
+    gsap.to(this.camera.position, {
+      y: 1000,
+      ease: 'power3.inOut',
+      duration: 1,
+    });
+    gsap.to(this.camera.position, {
+      z: 0,
+      ease: 'power3.inOut',
+      duration: 1,
+    });
+    gsap.to(this.camera.rotation, {
+      x: 0,
+      ease: 'power3.inOut',
+      duration: 2,
+    });
+    gsap.to(this.camera.position, {
+      y: 0,
+      ease: 'power3.in',
+      duration: 1.5,
+      delay: 2,
+    });
+    gsap.to(this.camera.position, {
+      z: 400,
+      ease: 'power3.inOut',
+      duration: 2,
+      delay:3
+    });
+    this.bShowPortfolioPage = false;
+  }
   miscFuncs() {
     gsap.to('#idH1', {
       opacity: 1,
@@ -281,7 +332,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   animate() {
-    // console.log('animate This: ', this);
     const renderer = this.renderer;
     const scene = this.scene;
     const mouse = this.mouse;

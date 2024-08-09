@@ -1,18 +1,20 @@
-<div class="absolute top-0 left-0">
-  <div class="bg-transparent m-10 w-4/5 h-4/5">
-    <div class="bg-transparent mb-4">
-      <ul class="text-white">
-        <li class="header-element" *ngFor="let h of headersElements" [routerLink]="h.link"
-          [routerLinkActive]="'active'">
+<div  *ngIf="!hide" class="absolute top-0 left-0">
+  <div class="mx-auto flex flex-col justify-center bg-transparent m-10 w-4/5 h-4/5">
+    <div class="bg-transparent mb-10">
+      <ul class="flex flex-wrap h-10 max-w-full flex-row text-white">
+        <li class="focus:text-red-300 p-1 w-auto overflow-hidden max-h-10 border-b  shadow-none m-1 shadow-white hover:border hover:bg-gray-500 hover:text-white hover:shadow-inner active:shadow-none" (click)="goHome()">🏡</li>
+        <li class="focus:text-red-300 p-1 w-auto overflow-hidden max-h-10 border-b  shadow-none m-1 shadow-white hover:border hover:bg-gray-500 hover:text-white hover:shadow-inner active:shadow-none" *ngFor="let h of headersElements" [routerLink]="h.link"
+          [routerLinkActive]="'focus:text-red-300'">
           {{ h.text }}
         </li>
+
       </ul>
     </div>
-    <div class="flex">
-      <div class="bg-transparent pg-content flex-1 text-blue-200">
+    <div class="mx-auto flex flex-col justify-center">
+      <div class="bg-transparent  flex-1 text-blue-200">
         <router-outlet></router-outlet>
       </div>
-      <div class="bg-transparent pg-footer">&copy; Kevin John - 2023</div>
+      <div class="bg-transparent ">&copy; Kevin John - 2023</div>
     </div>
   </div>
 </div>

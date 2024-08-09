@@ -1,18 +1,18 @@
-<div class="pg-transparent pg-container">
-  <div class="pg-transparent pg-header">
-    <ul>
-      <li
-        class="header-element"
-        *ngFor="let h of headersElements"
-        [routerLink]="h.link"
-        [routerLinkActive]="'active'"
-      >
-        {{ h.text }}
-      </li>
-    </ul>
+<div class="absolute top-0 left-0">
+  <div class="bg-transparent m-10 w-4/5 h-4/5">
+    <div class="bg-transparent mb-4">
+      <ul class="text-white">
+        <li class="header-element" *ngFor="let h of headersElements" [routerLink]="h.link"
+          [routerLinkActive]="'active'">
+          {{ h.text }}
+        </li>
+      </ul>
+    </div>
+    <div class="flex">
+      <div class="bg-transparent pg-content flex-1 text-blue-200">
+        <router-outlet></router-outlet>
+      </div>
+      <div class="bg-transparent pg-footer">&copy; Kevin John - 2023</div>
+    </div>
   </div>
-  <div class="pg-transparent pg-content">
-    <router-outlet></router-outlet>
-  </div>
-  <div class="pg-transparent pg-footer">&copy; Kevin John - 2023</div>
 </div>

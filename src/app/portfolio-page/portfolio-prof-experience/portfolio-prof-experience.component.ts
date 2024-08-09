@@ -13,9 +13,22 @@ export class PortfolioProfExperienceComponent {
     points: string[];
   }[] = [
     {
+      title: 'Software Programmer',
+      company: 'Safemix Sharjah',
+      timeperiod: '- May 2023 till now',
+      points: [
+        'Developing, upgrading and maintaining all the modules of the custom ERP software of the company.',
+        'Documentation and analysis of existing system.',
+        'Integration of modules with other systems',
+        'Inspect the database backups',
+        'Take part in key discussions with respective team leaders on required features/ upgrades',
+        'Provide training as and when required'
+      ],
+    },
+    {
       title: 'Senior Software Programmer',
       company: 'E-Softsat, JLT- Dubai',
-      timeperiod: '- May 2022 till now',
+      timeperiod: '- May 2022 till May 2023',
       points: [
         'Updating new features to the system.',
         'Documentation and analysis of existing system.',

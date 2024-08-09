@@ -14,8 +14,9 @@ import * as dat_gui_utils from './utils/dat_gui';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, AfterViewInit {
-  title = 'kj_portfolio';
-
+  // title = 'kj_portfolio';
+  nYearsOfExperience = 11;
+  uaeExperience = 8;
   bShowPortfolioPage = false;
   constructor() {
     // this.animate.prototype.bind = this;

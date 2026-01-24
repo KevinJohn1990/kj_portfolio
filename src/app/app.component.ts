@@ -17,13 +17,12 @@ import { Subject, Subscription } from 'rxjs';
 })
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   // title = 'kj_portfolio';
-  nYearsOfExperience = 11;
-  uaeExperience = 8;
+  nYearsOfExperience = 12;
+  uaeExperience = 9;
   bShowPortfolioPage = false;
   constructor(private cameraService: CameraService) {
     // this.animate.prototype.bind = this;
   }
-
 
   // gui = dat_gui_utils.NewGuiObject(); // new dat.GUI();
   frame = 0;
@@ -46,7 +45,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   // raycaster - little laser pointer - points to screen
 
   scene = new THREE.Scene();
-  camera = this.cameraService.setAndGetCamera(75, innerWidth / innerHeight, 0.1, 1000);
+  camera = this.cameraService.setAndGetCamera(
+    75,
+    innerWidth / innerHeight,
+    0.1,
+    1000,
+  );
   mouse = {
     x: undefined,
     y: undefined,
@@ -68,13 +72,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   private cameraSubscription: Subscription = null;
   ngOnInit(): void {
     this.cameraService.setCameraSubs(this.cameraSubs);
-    this.cameraSubscription = this.cameraSubs.subscribe(s => {
+    this.cameraSubscription = this.cameraSubs.subscribe((s) => {
       this.resetCamera();
-    })
+    });
   }
 
   ngOnDestroy(): void {
-   if (this.cameraSubscription) this.cameraSubscription.unsubscribe();
+    if (this.cameraSubscription) this.cameraSubscription.unsubscribe();
   }
 
   resizeEventListener = (e) => {
@@ -101,7 +105,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     window.addEventListener('resize', this.resizeEventListener);
     window.addEventListener('mousemove', this.mouseMoveEventListener);
     this.miscFuncs();
- 
   }
 
   private animationFrameId;
@@ -152,7 +155,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  resetCamera(){
+  resetCamera() {
     gsap.to('#container', {
       opacity: 1,
       duration: 1.5,
@@ -183,7 +186,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       z: 400,
       ease: 'power3.inOut',
       duration: 2,
-      delay:3
+      delay: 3,
     });
     this.bShowPortfolioPage = false;
   }
@@ -273,7 +276,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       world.plane.width,
       world.plane.height,
       world.plane.widthSegments,
-      world.plane.heightSegments
+      world.plane.heightSegments,
     );
     // MeshBasicMaterial - does not react to light
     // MeshPhongMaterial - for this material we need light
@@ -322,7 +325,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     this.starGeometry.setAttribute(
       'position',
-      new THREE.Float32BufferAttribute(starVertices, 3)
+      new THREE.Float32BufferAttribute(starVertices, 3),
     );
 
     this.stars = new THREE.Points(this.starGeometry, this.starMaterial);
@@ -458,7 +461,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       world.plane.width,
       world.plane.height,
       world.plane.widthSegments,
-      world.plane.heightSegments
+      world.plane.heightSegments,
     );
     this.setPosition(planeMesh, world);
   }
@@ -494,7 +497,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       mesh.geometry.setAttribute(
         'color',
-        new THREE.BufferAttribute(new Float32Array(colors), 3)
+        new THREE.BufferAttribute(new Float32Array(colors), 3),
       );
     }
   }
